@@ -1,1 +1,67 @@
-rds code
+import mysql.connector
+
+# Database connection details
+DB_HOST = "your-rds-endpoint.us-east-1.rds.amazonaws.com" # Replace with your RDS endpoint
+DB_USER = "admin" # Replace with your database username
+DB_PASSWORD = "your_password" # Replace with your database password
+DB_NAME = "your_database_name" # Replace with your database name
+
+try:
+    # Establish the connection
+    cnx = mysql.connector.connect(
+        host=DB_HOST,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME
+    )
+
+    # Create a cursor object
+    cursor = cnx.cursor()
+
+    # Execute a query (example: select data)
+    cursor.execute("SELECT * FROM your_table_name") # Replace with your table name
+
+    # Fetch and print results
+    for row in cursor:
+        print(row)
+
+except mysql.connector.Error as err:
+    print(f"Error: {err}")
+
+finally:
+    # Close the cursor and connection
+    if 'cursor' in locals() and cursor is not None:
+        cursor.close()
+    if 'cnx' in locals() and cnx is not None:
+        cnx.close()
+    print("Database connection closed.")
+2. Managing RDS Instances with Boto3:
+Boto3 allows you to programmatically manage your AWS RDS instances (e.g., creating, modifying, deleting instances, snapshots, etc.).
+Python
+
+import boto3
+
+# Create an RDS client
+rds_client = boto3.client('rds', region_name='us-east-1') # Replace with your AWS region
+
+try:
+    # Example: List all RDS DB instances
+    response = rds_client.describe_db_instances()
+    for db_instance in response['DBInstances']:
+        print(f"DB Instance Identifier: {db_instance['DBInstanceIdentifier']}")
+        print(f"Engine: {db_instance['Engine']}")
+        print(f"Status: {db_instance['DBInstanceStatus']}")
+
+    # Example: Create a new DB instance (simplified for demonstration)
+    # rds_client.create_db_instance(
+    #     DBInstanceIdentifier='my-new-instance',
+    #     DBInstanceClass='db.t2.micro',
+    #     Engine='mysql',
+    #     MasterUsername='admin',
+    #     MasterUserPassword='your_new_password',
+    #     AllocatedStorage=20
+    # )
+    # print("New DB instance creation initiated.")
+
+except Exception as e:
+    print(f"Error managing RDS: {e}")
