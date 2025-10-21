@@ -21,7 +21,7 @@ try:
     # Execute a query (example: select data)
     cursor.execute("SELECT * FROM your_table_name") # Replace with your table name
 
-    # Fetch and print results
+    # Fetch and print results cc
     for row in cursor:
         print(row)
 
